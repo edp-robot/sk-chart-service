@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "sk-chart-service.fullname" . }}-test-connection"
+  labels:
+    {{- include "sk-chart-service.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "sk-chart-service.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
